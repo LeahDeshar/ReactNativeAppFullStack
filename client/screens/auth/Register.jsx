@@ -2,15 +2,16 @@ import { View, Text ,StyleSheet, TextInput, Alert} from 'react-native'
 import React, { useState } from 'react'
 import InputBox from '../../components/Forms/InputBox'
 import Submit from '../../components/Forms/Submit';
+import axios from "axios"
 
-const Register = ({navigation}) => {
+  const Register = ({navigation}) => {
   const [name,setName] = useState('');
   const [ email,setEmail] = useState('')
   const [ password,setPassword] = useState('')
   const [ loading,setLoading] = useState(false)
 
 
-  const handleSubmit = ()=>
+  const handleSubmit = async ()=>
   {
     try {
       setLoading(true);
@@ -21,8 +22,11 @@ const Register = ({navigation}) => {
         return 
       }
       setLoading(false);
+      const {data} = await axios.post("http://192.168.1.8:8000/api/v1/auth/register",{name,email,password})
+      console.log(data && data.message)
       console.log("register",{name,email,password})
     } catch (error) {
+      console.log(error.response.data.message)
       setLoading(false);
       console.log('Error', error)
     }
